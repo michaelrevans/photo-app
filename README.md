@@ -45,3 +45,55 @@ $ rails g devise:views:bootstrap_templates
 In `assets/stylesheets/application.cdd` add `*= require devise_botstrap_views` above `*= require_tree .`
 
 *This adds bootstrap files and provides a layout, as well as building the bootstrap templates for devise*
+
+<br/>
+
+Configure the sending of emails using Sendgrid. At this point a verified Heroku account is necessary
+
+```bash
+$ heroku addons:create sendgrid:starter
+$ heroku config:set SENDGRID_USERNAME=enterintheusername
+$ heroku config:set SENDGRID_PASSWORD=enterinthepassword
+```
+
+In order to view the username and password:
+
+```bash
+$ heroku config:get SENDGRID_USERNAME # or _PASSWORD
+```
+
+In `.zshrc` (or `.bashrc` if not using ZSH) add the same information
+```bash
+export SENDGRID_USERNAME=enterintheusername
+export SENDGRID_PASSWORD=enterinthepassword
+```
+
+In `config/environment.rb` add the action mailer configuration:
+
+```
+ActionMailer::Base.smtp_settings = {
+  :address => 'smtp.sendgrid.net',
+  :port => '587',
+  :authentication => :plain,
+  :user_name => ENV['SENDGRID_USERNAME'],
+  :password => ENV['SENDGRID_PASSWORD'],
+  :domain => 'heroku.com',
+  :enable_starttls_auto => true
+}
+```
+
+In `config/environments/development.rb` add development-specific configurations:
+
+```
+config.action_mailer.delivery_method = :test
+config.action_mailer.default_url_options = { :host => 'https://localhost:3000' } # or whatever the local URL is
+```
+
+In `config/environemtns/production.rb` add production-specific configurations:
+
+```
+config.action_mailer.delivery_method = :smtp
+config.action_mailer.default_url_options = { :host => 'appname.herokuapp.com', :protocol => 'https'}
+```
+
+In development, the confirmation email will just be displayed in the server console, so the confirmation link can be taken from there in order to verify the account.
