@@ -1,0 +1,5 @@
+export SENDGRID_USERNAME=app74999071@heroku.com
+export SENDGRID_PASSWORD=Karelia.1o1
+
+export STRIPE_TEST_SECRET_KEY=sk_test_EbcRSszRPqRHhgSGqiza7ZfE
+export STRIPE_TEST_PUBLISHABLE_KEY=pk_test_q9YrqMzWrUX5kypiojsA59Am
